@@ -1,3 +1,4 @@
+import "@navikt/ds-css";
 import MicroFrontend from "./Microfrontend";
 
 function App() {
