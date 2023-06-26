@@ -4,7 +4,6 @@ import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 import * as path from "path";
 import {rollupImportMapPlugin} from "rollup-plugin-import-map";
 import importmap from "./importmap.json" assert {type: "json"};
-import federation from "@originjs/vite-plugin-federation";
 
 /** // TODO
  * Må kunne bygge bundle og bruke Aksel-komponenter i container-app. Det fungerer ikke nå
@@ -15,20 +14,11 @@ export default defineConfig({
   plugins: [
     react(),
     cssInjectedByJsPlugin(),
-    // {
-    //   ...rollupImportMapPlugin([importmap]),
-    //   enforce: "pre",
-    //   apply: "build",
-    // },
-    federation({
-      name: "deltakerliste",
-      filename: "Microfrontend.tsx",
-      // Modules to expose
-      exposes: {
-        "./Microfrontend": "./src/Microfrontend.tsx",
-      },
-      shared: ["react", "react-dom"],
-    }),
+    {
+      ...rollupImportMapPlugin([importmap]),
+      enforce: "pre",
+      apply: "build",
+    },
   ],
   build: {
     manifest: true,
@@ -37,9 +27,6 @@ export default defineConfig({
       name: "deltakerliste",
       formats: ["es"],
       fileName: () => `bundle.js`,
-    },
-    rollupOptions: {
-      external: ["react", "react-dom"],
     },
   },
 });
